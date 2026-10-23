@@ -6,8 +6,15 @@ import type { Metadata, Viewport } from "next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+
+
 export const metadata: Metadata = { title: "Nuitée - Hôtels & Passages à Kinshasa" };
-export const viewport: Viewport = { width: "device-width", initialScale: 1 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
