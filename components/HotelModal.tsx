@@ -1,7 +1,9 @@
 "use client";
 import { useApp } from "@/lib/store";
 import { formatPrice } from "@/lib/price";
-import { IMAGES } from "@/lib/images";
+import { photosOf } from "@/lib/images";
+import PhotoCarousel from "./PhotoCarousel";
+
 
 export default function HotelModal() {
   const { selected: h, setShareOpen, currency } = useApp();
@@ -22,7 +24,7 @@ export default function HotelModal() {
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="relative h-52 sm:h-56 bg-slate-800 shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={IMAGES[h.id]} alt={h.name} className="w-full h-full object-cover" />
+            <PhotoCarousel photos={photosOf(h.id)} alt={h.name} />
 
             <button
               onClick={() => history.back()}

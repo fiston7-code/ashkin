@@ -1,14 +1,20 @@
-const u = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=600&q=80`;
+// Photos réelles : public/hotels/<id>/1.webp, 2.webp, ...
 
-export const IMAGES: Record<number, string> = {
-  1: u("1590490360182-c33d57733427"),
-  2: u("1566073771259-6a8506099945"),
-  3: u("1582719478250-c89cae4dc85b"),
-  4: u("1618773928121-c32242e63f39"),
-  5: u("1591088398332-8a7791972843"),
-  6: u("1571896349842-33c89424de2d"),
-  7: u("1542314831-068cd1dbfeeb"),
-  8: u("1520250497591-112f2f40a3f4"),
-  9: u("1595576508898-0ad5c879a061"),
-  10: u("1505691938895-1758d7feb511"),
+// Ajoute une ligne ici quand tu as les photos d'un hôtel.
+const PLACEHOLDER = "/hotels/placeholder.svg";
+
+const PHOTOS: Record<number, string[]> = {
+  1: ["/hotels/1/1.webp", "/hotels/1/2.webp", "/hotels/1/3.webp", "/hotels/1/4.webp"],
+  2: ["/hotels/2/1.webp", "/hotels/2/2.webp", "/hotels/2/3.webp", "/hotels/2/4.webp"],
+  3: ["/hotels/3/1.webp", "/hotels/3/2.webp", "/hotels/3/3.webp", "/hotels/3/4.webp"],
+  4: ["/hotels/4/1.webp", "/hotels/4/2.webp", "/hotels/4/3.webp", "/hotels/4/4.webp"],
+  5: ["/hotels/5/1.webp", "/hotels/5/2.webp", "/hotels/5/3.webp"],
+  6: ["/hotels/6/1.webp", "/hotels/6/2.webp", "/hotels/6/3.webp", "/hotels/6/4.webp"],
+  7: ["/hotels/7/1.webp", "/hotels/7/2.webp", "/hotels/7/3.webp", "/hotels/7/4.webp"],
+  8: ["/hotels/8/1.webp", "/hotels/8/2.webp", "/hotels/8/3.webp", "/hotels/8/4.webp"],
 };
+
+export const photosOf = (id: number): string[] =>
+  PHOTOS[id] && PHOTOS[id].length > 0 ? PHOTOS[id] : [PLACEHOLDER];
+
+export const coverOf = (id: number): string => photosOf(id)[0];

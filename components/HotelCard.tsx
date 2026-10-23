@@ -1,7 +1,8 @@
 "use client";
 import { useApp, type HotelWithDistance } from "@/lib/store";
 import { formatPrice, priceOf } from "@/lib/price";
-import { IMAGES } from "@/lib/images";
+import { photosOf } from "@/lib/images";
+import PhotoCarousel from "./PhotoCarousel";
 
 export default function HotelCard({ h }: { h: HotelWithDistance }) {
   const { stay, currency, setSelected } = useApp();
@@ -22,7 +23,7 @@ export default function HotelCard({ h }: { h: HotelWithDistance }) {
     >
       <div className="relative h-44 sm:h-52 bg-slate-800">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={IMAGES[h.id]} alt={h.name} loading="lazy" className="w-full h-full object-cover" />
+      <PhotoCarousel photos={photosOf(h.id)} alt={h.name} />
 
         <div className="absolute top-2.5 right-2.5 bg-slate-950/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-amber-400 border border-amber-400/20">
           <i className="fa-solid fa-star text-[11px]" /> {h.rating}
