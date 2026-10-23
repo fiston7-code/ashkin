@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useApp } from "@/lib/store";
 import { COMMUNES } from "@/lib/hotels";
 import { formatPrice } from "@/lib/price";
@@ -10,53 +11,85 @@ const LABELS: Record<string, string> = {
 
 export default function Filters() {
   const { commune, setCommune, stay, setStay, maxBudget, setMaxBudget, currency, setPosition } = useApp();
+  const [note, setNote] = useState<{ text: string; error?: boolean } | null>(null);
 
   function locate() {
     if (!("geolocation" in navigator)) {
-      alert("La géolocalisation n'est pas supportée sur ce navigateur.");
+      setNote({ text: "La géolocalisation n'est pas supportée sur ce navigateur.", error: true });
       return;
     }
+    setNote({ text: "Recherche de votre position..." });
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setPosition({ lat: p.coords.latitude, lng: p.coords.longitude });
         setCommune("ALL");
-        alert("Position détectée ! Les hôtels sont triés du plus proche au plus éloigné.");
+        setNote({ text: "Position détectée : hôtels triés du plus proche au plus éloigné." });
       },
-      () => alert("Géolocalisation non activée. Sélectionnez votre commune manuellement.")
+      () => setNote({ text: "Géolocalisation non activée. Choisissez votre commune manuellement.", error: true }),
+      { timeout: 10000 }
     );
   }
 
-  const on = "flex-1 py-1 text-[11px] font-semibold rounded-lg bg-brand-600 text-white transition";
-  const off = "flex-1 py-1 text-[11px] font-semibold rounded-lg text-slate-400 hover:text-white transition";
+  const base = "flex-1 min-h-11 px-2 text-sm font-semibold rounded-lg transition";
+  const on = `${base} bg-brand-600 text-white`;
+  const off = `${base} text-slate-400 hover:text-white`;
 
   return (
-    <section className="bg-slate-900/60 p-3 border-b border-slate-800 space-y-2.5">
+    <section className="bg-slate-900/60 p-3 sm:p-4 border-b border-slate-800 space-y-3">
       <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <select value={commune} onChange={(e) => setCommune(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500 appearance-none">
-            <option value="ALL">Toutes les Communes (Kinshasa)</option>
+        <div className="relative flex-1 min-w-0">
+          <select
+            value={commune}
+            onChange={(e) => setCommune(e.target.value)}
+            aria-label="Commune"
+            className="w-full h-12 bg-slate-800 border border-slate-700 rounded-xl pl-3.5 pr-9 text-base text-slate-200 focus:outline-none focus:border-brand-500 appearance-none"
+          >
+            <option value="ALL">Toutes les communes</option>
             {COMMUNES.map((c) => (
               <option key={c} value={c}>{LABELS[c] ?? c}</option>
             ))}
           </select>
-          <i className="fa-solid fa-chevron-down absolute right-3 top-2.5 text-xs text-slate-400 pointer-events-none" />
+          <i className="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none" />
         </div>
-        <button onClick={locate} className="bg-brand-600/20 text-brand-400 border border-brand-500/30 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 hover:bg-brand-600/30 transition whitespace-nowrap">
+        <button
+          onClick={locate}
+          className="h-12 shrink-0 bg-brand-600/20 text-brand-400 border border-brand-500/30 px-4 rounded-xl text-sm font-medium flex items-center gap-2 hover:bg-brand-600/30 active:scale-95 transition whitespace-nowrap"
+        >
           <i className="fa-solid fa-location-crosshairs" /> Proche
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 items-center">
+      {note && (
+        <p role="status" className={`text-xs ${note.error ? "text-rose-400" : "text-emerald-400"}`}>
+          {note.text}
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-stretch">
         <div className="flex bg-slate-800 p-1 rounded-xl border border-slate-700/80">
-          <button onClick={() => setStay("passage")} className={stay === "passage" ? on : off}>Passage (2-4h)</button>
-          <button onClick={() => setStay("nuitee")} className={stay === "nuitee" ? on : off}>Nuitée</button>
+          <button onClick={() => setStay("passage")} className={stay === "passage" ? on : off}>
+            Passage (2-4h)
+          </button>
+          <button onClick={() => setStay("nuitee")} className={stay === "nuitee" ? on : off}>
+            Nuitée
+          </button>
         </div>
-        <div className="bg-slate-800/80 px-2.5 py-1 rounded-xl border border-slate-700/80 flex flex-col justify-center">
-          <div className="flex justify-between items-center text-[10px] text-slate-400 mb-0.5">
-            <span>Max Budget</span>
-            <span className="font-bold text-brand-400 text-xs">{formatPrice(maxBudget, currency)}</span>
+
+        <div className="bg-slate-800/80 px-3.5 py-2.5 rounded-xl border border-slate-700/80 flex flex-col justify-center gap-1.5">
+          <div className="flex justify-between items-center text-sm text-slate-400">
+            <label htmlFor="budget">Budget max</label>
+            <span className="font-bold text-brand-400 text-base">{formatPrice(maxBudget, currency)}</span>
           </div>
-          <input type="range" min={10} max={70} step={5} value={maxBudget} onChange={(e) => setMaxBudget(+e.target.value)} className="w-full accent-brand-500 h-1 bg-slate-700 rounded-lg cursor-pointer" />
+          <input
+            id="budget"
+            type="range"
+            min={10}
+            max={70}
+            step={5}
+            value={maxBudget}
+            onChange={(e) => setMaxBudget(+e.target.value)}
+            className="w-full h-8 accent-brand-500 cursor-pointer"
+          />
         </div>
       </div>
     </section>

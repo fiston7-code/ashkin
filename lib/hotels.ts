@@ -2,7 +2,8 @@ import type { Hotel } from "./types";
 
 export const COMMUNES = [
   "Gombe", "Bandalungwa", "Kalamu", "Limete",
-  "Lemba", "Ngaliema", "Kintambo", "Kasa-Vubu",
+  "Lemba", "Ngaliema", "Kintambo", "Kasa-Vubu", "Matete", 
+  "barumbu"
 ] as const;
 
 export const KINSHASA_CENTER = { lat: -4.335, lng: 15.305 };
@@ -18,4 +19,5 @@ export const hotels: Hotel[] = [
   { id: 8, name: "Hôtel Secret Kasa-Vubu", commune: "Kasa-Vubu", lat: -4.335, lng: 15.305, pricePassageUSD: 14, priceNuiteeUSD: 25, rating: 4.3, landmark: "Avenue Assossa, près du Stade des Martyrs", phone: "+243820000008", isOpen: true, amenities: ["Clim", "Bar", "Wifi"] },
   { id: 9, name: "Eden Rose Matonge", commune: "Kalamu", lat: -4.344, lng: 15.316, pricePassageUSD: 18, priceNuiteeUSD: 30, rating: 4.4, landmark: "Au cœur de Matonge, avenue Stade", phone: "+243840000009", isOpen: true, amenities: ["Groupe électrogène", "Clim", "Eau chaude"] },
   { id: 10, name: "Résidence Bandal Tschangu", commune: "Bandalungwa", lat: -4.341, lng: 15.289, pricePassageUSD: 20, priceNuiteeUSD: 38, rating: 4.5, landmark: "Bandal Makelele, près de l'arrêt Block", phone: "+243850000010", isOpen: true, amenities: ["Groupe électrogène", "Clim", "Eau chaude", "Parking"] },
+  {id: 11, name: "tino", commune: "barumbu", lat: -4.3582, lng: 15.3371, pricePassageUSD: 10, priceNuiteeUSD: 35, rating: 4.5, landmark: "bon marche, kabambare, près de la station", phone: "+243850000011", isOpen: true, amenities: ["Groupe électrogène", "Clim", "Parking fermé", "Wifi"] },
 ];
